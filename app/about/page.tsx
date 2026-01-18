@@ -21,7 +21,7 @@ export default function AboutPage() {
                 <div>
                     <h2 className="text-3xl font-bold mb-4">Our Story</h2>
                     <p className="text-muted-foreground mb-4">
-                        Founded by former instructional designers and educators, Lotus Learning was born out of frustration with the time-consuming process of building courses in LMS platforms.
+                        Lotus Learning was founded by a dedicated team of students. We set out to create a better LMS but realized we needed to start by building better courses, understanding the ins and outs of instructor workflows and the instructional designer approach.
                     </p>
                     <p className="text-muted-foreground">
                         We realized that while faculty are subject matter experts, they aren't always web designers. Lotus Learning bridges that gap, allowing educators to focus on teaching while our software handles the presentation.

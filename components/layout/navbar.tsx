@@ -6,17 +6,32 @@ import { Logo } from "@/components/logo";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
-    { name: "Features", href: "/#features" },
-    { name: "Security", href: "/security" },
-    { name: "Support", href: "/support" },
-    { name: "About", href: "/about" },
-    { name: "FAQ", href: "/faq" },
+    { name: "Features", href: "/#features", targetId: "features" },
+    { name: "Security", href: "/security", targetId: null },
+    { name: "Support", href: "/support", targetId: null },
+    { name: "About", href: "/about", targetId: null },
+    { name: "FAQ", href: "/faq", targetId: null },
 ];
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
+
+    const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string, targetId: string | null) => {
+        if (targetId && pathname === "/") {
+            e.preventDefault();
+            const element = document.getElementById(targetId);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+                setIsOpen(false);
+            }
+        } else {
+            setIsOpen(false);
+        }
+    };
 
     return (
         <>
@@ -30,6 +45,7 @@ export function Navbar() {
                             <Link
                                 key={link.name}
                                 href={link.href}
+                                onClick={(e) => handleScroll(e, link.href, link.targetId)}
                                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                             >
                                 {link.name}
@@ -88,7 +104,7 @@ export function Navbar() {
                                             key={link.name}
                                             href={link.href}
                                             className="text-lg font-medium text-muted-foreground hover:text-primary transition-colors"
-                                            onClick={() => setIsOpen(false)}
+                                            onClick={(e) => handleScroll(e, link.href, link.targetId)}
                                         >
                                             {link.name}
                                         </Link>

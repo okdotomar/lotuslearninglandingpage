@@ -5,6 +5,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     /* Glassmorphism Configuration */
     --background: 210 40% 98%;

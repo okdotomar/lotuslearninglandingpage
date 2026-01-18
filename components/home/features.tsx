@@ -8,7 +8,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Zap, Palette, Accessibility, Layout } from "lucide-react";
+import { Zap, Palette, Accessibility, Layout, RefreshCw } from "lucide-react";
 
 export function Features() {
     return (
@@ -22,12 +22,13 @@ export function Features() {
                 </p>
             </div>
 
-            <Tabs defaultValue="speed" className="w-full max-w-4xl mx-auto">
-                <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto p-1 bg-white/10 backdrop-blur-md border border-white/20">
+            <Tabs defaultValue="speed" className="w-full max-w-5xl mx-auto">
+                <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto p-1 bg-white/10 backdrop-blur-md border border-white/20">
                     <TabsTrigger value="speed" className="py-3">Speed</TabsTrigger>
                     <TabsTrigger value="design" className="py-3">Design</TabsTrigger>
                     <TabsTrigger value="accessibility" className="py-3">Accessibility</TabsTrigger>
                     <TabsTrigger value="structure" className="py-3">Structure</TabsTrigger>
+                    <TabsTrigger value="refinement" className="py-3">Refinement</TabsTrigger>
                 </TabsList>
 
                 <div className="mt-8">
@@ -60,6 +61,14 @@ export function Features() {
                             title="Smart Templating"
                             description="Use pre-built, pedagogical templates designed by instructional experts. Maintain consistency across modules and simplify navigation for students."
                             icon={<Layout className="h-12 w-12 text-primary mb-4" />}
+                        />
+                    </TabsContent>
+
+                    <TabsContent value="refinement">
+                        <FeatureCard
+                            title="Continuous Refinement"
+                            description="Improve existing courses with automated feedback loops. Scan for outdated content, receive step-by-step iteration guides, and refine syllabi instantly."
+                            icon={<RefreshCw className="h-12 w-12 text-primary mb-4" />}
                         />
                     </TabsContent>
                 </div>
