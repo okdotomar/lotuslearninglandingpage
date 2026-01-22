@@ -1,51 +1,121 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Mail, MessageCircle, FileText } from "lucide-react";
+import { submitContactForm } from "@/actions/contact";
+import { CheckCircle2, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 export default function SupportPage() {
+    const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+
+    async function handleSubmit(formData: FormData) {
+        setStatus("loading");
+        try {
+            await submitContactForm(formData);
+            setStatus("success");
+        } catch (error) {
+            console.error(error);
+            setStatus("idle");
+            alert("Something went wrong. Please try again.");
+        }
+    }
+
+    if (status === "success") {
+        return (
+            <div className="container mx-auto px-4 pt-32 pb-12 md:py-24 max-w-2xl min-h-[60vh] flex flex-col items-center justify-center text-center">
+                <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, type: "spring" }}
+                    className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-green-500/20 backdrop-blur-md border border-green-500/30"
+                >
+                    <CheckCircle2 className="h-12 w-12 text-green-500" />
+                </motion.div>
+                <motion.h2
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-3xl font-bold font-orbiter mb-4"
+                >
+                    Support Request Sent!
+                </motion.h2>
+                <motion.p
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-muted-foreground text-lg mb-8 max-w-md"
+                >
+                    Our support team has received your request and will get back to you shortly.
+                </motion.p>
+                <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                >
+                    <Button variant="outline" onClick={() => setStatus("idle")}>
+                        Submit Another Request
+                    </Button>
+                </motion.div>
+            </div>
+        );
+    }
+
     return (
-        <div className="container mx-auto px-4 pt-32 pb-12 md:py-24 max-w-4xl">
-            <div className="text-center mb-16">
-                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-4">How can we help?</h1>
+        <div className="container mx-auto px-4 pt-32 pb-12 md:py-24 max-w-2xl">
+            <div className="text-center mb-12">
+                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-4">Support Center</h1>
                 <p className="text-xl text-muted-foreground">
-                    Our support team is ready to assist you. Choose a channel below.
+                    Need help? Fill out the form below to reach our support engineering team.
                 </p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
-                <div className="flex flex-col p-6 glass-card hover:shadow-xl transition-all hover:bg-white/40">
-                    <FileText className="h-8 w-8 text-primary mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Documentation</h3>
-                    <p className="text-muted-foreground mb-4 flex-1">
-                        Browse our comprehensive guides and tutorials for admins and instructors.
-                    </p>
-                    <Button variant="outline" className="w-full">Visit Knowledge Base</Button>
+            <form
+                action={handleSubmit}
+                className="space-y-6 glass-panel p-8 rounded-2xl relative overflow-hidden"
+            >
+                {status === "loading" && (
+                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/50 backdrop-blur-[2px]">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <label htmlFor="first-name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">First name</label>
+                        <input required id="first-name" name="first-name" className="flex h-10 w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 backdrop-blur-sm" placeholder="Jane" />
+                    </div>
+                    <div className="space-y-2">
+                        <label htmlFor="last-name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Last name</label>
+                        <input required id="last-name" name="last-name" className="flex h-10 w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 backdrop-blur-sm" placeholder="Doe" />
+                    </div>
                 </div>
 
-                <div className="flex flex-col p-6 glass-card hover:shadow-xl transition-all hover:bg-white/40">
-                    <MessageCircle className="h-8 w-8 text-primary mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Live Chat</h3>
-                    <p className="text-muted-foreground mb-4 flex-1">
-                        Chat with our support engineers in real-time. Available M-F, 9am-5pm EST.
-                    </p>
-                    <Button variant="outline" className="w-full">Start Chat</Button>
+                <div className="space-y-2">
+                    <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Work Email</label>
+                    <input required id="email" name="email" type="email" className="flex h-10 w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 backdrop-blur-sm" placeholder="jane@university.edu" />
                 </div>
 
-                <div className="flex flex-col p-6 glass-card hover:shadow-xl transition-all hover:bg-white/40">
-                    <Mail className="h-8 w-8 text-primary mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Email Support</h3>
-                    <p className="text-muted-foreground mb-4 flex-1">
-                        Send us a detailed message and we'll get back to you within 24 hours.
-                    </p>
-                    <Button variant="outline" className="w-full">Contact Support</Button>
+                <div className="space-y-2">
+                    <label htmlFor="institution" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Institution</label>
+                    <input required id="institution" name="institution" className="flex h-10 w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 backdrop-blur-sm" placeholder="University of ..." />
                 </div>
-            </div>
 
-            <div className="mt-16 p-8 glass-panel rounded-2xl text-center">
-                <h2 className="text-2xl font-bold mb-4">Looking for sales?</h2>
-                <p className="text-muted-foreground mb-6">If you are interested in purchasing a license for your institution, please contact our sales team.</p>
-                <Button asChild>
-                    <Link href="/contact">Contact Sales</Link>
+                <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Issue Description</label>
+                    <textarea required id="message" name="message" className="flex min-h-[120px] w-full rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 backdrop-blur-sm" placeholder="Describe the issue you are experiencing..." />
+                </div>
+
+                <Button type="submit" className="w-full" size="lg" disabled={status === "loading"}>
+                    {status === "loading" ? "Submitting Request..." : "Submit Support Request"}
+                </Button>
+            </form>
+
+            <div className="mt-16 text-center">
+                <p className="text-muted-foreground">Looking for sales instead?</p>
+                <Button variant="link" asChild className="mt-2 text-primary">
+                    <Link href="/contact">Contact Sales Team &rarr;</Link>
                 </Button>
             </div>
         </div>
