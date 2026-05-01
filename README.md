@@ -4,6 +4,8 @@ Marketing and informational landing page for **Lotus Learning**, an LTI tool tha
 
 Live repo: [github.com/okdotomar/lotuslearninglandingpage](https://github.com/okdotomar/lotuslearninglandingpage)
 
+![Lotus Learning Landing Page](public/preview.png)
+
 ---
 
 ## Tech Stack
